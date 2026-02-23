@@ -1,0 +1,46 @@
+{
+  "$schema": "ai_automation PRD v1",
+  "project_name": "프로젝트/기능명",
+  "goal": "이 PRD가 달성하려는 최종 목표를 한 문장으로",
+  "tech_stack": {
+    "language": "python",
+    "framework": "fastapi",
+    "database": "postgresql",
+    "infrastructure": []
+  },
+  "context": {
+    "existing_patterns": "기존 프로젝트의 아키텍처 패턴 설명 (있으면)",
+    "constraints": "제약조건 (예: Python 3.11+, 외부 API 의존 등)"
+  },
+  "stories": [
+    {
+      "id": "S1",
+      "title": "사용자 스토리 제목",
+      "description": "As a [역할], I want [기능] so that [이유]",
+      "acceptance_criteria": [
+        "조건 1: 구체적이고 테스트 가능한 수락 기준",
+        "조건 2: 예상 입출력이 명확한 기준"
+      ],
+      "priority": 1,
+      "dependencies": []
+    },
+    {
+      "id": "S2",
+      "title": "두 번째 사용자 스토리",
+      "description": "As a [역할], I want [기능] so that [이유]",
+      "acceptance_criteria": [
+        "조건 1",
+        "조건 2"
+      ],
+      "priority": 2,
+      "dependencies": ["S1"]
+    }
+  ],
+  "non_functional": {
+    "performance": "응답 시간 < 200ms",
+    "security": "인증 필요 여부, 민감 데이터 유무",
+    "testing": "최소 커버리지 80%"
+  },
+  "scale_override": null,
+  "_comment_scale": "null이면 자동 판단. 강제 지정: 'S' (1 agent, 5 loops), 'M' (3 agents, 15 loops), 'L' (5+ agents, 25 loops)"
+}
