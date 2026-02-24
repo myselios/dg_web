@@ -54,7 +54,7 @@ export function ImageDetailModal({ card, onClose }: Props) {
   const model = COMFY_MODELS.find((m) => m.id === card.model);
 
   return (
-    <div className={styles.backdrop} onClick={onClose}>
+    <div className={styles.backdrop} data-testid="detail-backdrop" onClick={onClose}>
       <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
         <button className={styles.closeBtn} onClick={onClose} aria-label="Close">
           <CloseIcon />
