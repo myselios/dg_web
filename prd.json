@@ -1,0 +1,122 @@
+{
+  "$schema": "ai_automation PRD v1",
+  "project_name": "FutureLens Visual",
+  "goal": "Samsung One UI 스타일의 미니멀 다크 모드 기반 ComfyUI 이미지 생성 웹 서비스 (Mock API)",
+  "tech_stack": {
+    "language": "TypeScript (Strict mode)",
+    "framework": "React 18+",
+    "build_tool": "Vite",
+    "database": "없음 (Mock 데이터)",
+    "infrastructure": ["Vite Dev Server"],
+    "styling": "CSS Modules (Tailwind CSS 미사용)",
+    "state_management": "React Context + useReducer",
+    "routing": "React Router v6",
+    "testing": "Vitest + React Testing Library",
+    "linting": "ESLint + Prettier",
+    "design_reference": "https://higgsfield.ai/",
+    "design_system": "Samsung One UI 스타일, 다크 모드 전용"
+  },
+  "context": {
+    "existing_patterns": "신규 프로젝트. Clean Architecture 레이어 구조 적용. 불변성 패턴 필수.",
+    "constraints": "실제 ComfyUI 서버 없음. 모든 API는 setTimeout 기반 Mock으로 구현. 외부 샘플 이미지 URL 사용."
+  },
+  "stories": [
+    {
+      "id": "S1",
+      "title": "Header & Navigation",
+      "description": "As a user, I want to quickly access core service info and navigation so that I can work efficiently.",
+      "acceptance_criteria": [
+        "'FutureLens Visual' 타이틀이 좌측에 표시된다",
+        "우측에 Queue 상태 위젯이 실시간 갱신된다 (대기 중 N건)",
+        "가상 로그인 프로필 영역이 표시된다",
+        "히스토리 아이콘 클릭 시 히스토리 패널이 토글된다",
+        "검색 아이콘이 동작한다",
+        "'스타일 가이드' 버튼 클릭 시 모달(S6)이 열린다"
+      ],
+      "priority": 1,
+      "dependencies": []
+    },
+    {
+      "id": "S2",
+      "title": "Feature Select (워크플로우 탭)",
+      "description": "As a user, I want to intuitively select a workflow (Upscale, 2D to 3D, etc.) so that I can use the desired feature.",
+      "acceptance_criteria": [
+        "칩/탭 형태로 워크플로우 목록이 수평 나열된다 (Text to Image, Upscale, 2D to 3D, Inpaint, Style Transfer)",
+        "선택된 탭에 시각적 활성 상태(하이라이트)가 표시된다",
+        "탭 전환 시 Gallery(S3) 콘텐츠가 해당 카테고리로 필터링된다",
+        "탭 전환 애니메이션이 부드럽게 동작한다"
+      ],
+      "priority": 2,
+      "dependencies": ["S1"]
+    },
+    {
+      "id": "S3",
+      "title": "Community Gallery",
+      "description": "As a user, I want to browse images created by other users in card format so that I can get inspiration.",
+      "acceptance_criteria": [
+        "카드 그리드 레이아웃이 반응형으로 표시된다 (2~4열 자동 조정)",
+        "각 카드에 이미지, 프롬프트 요약, 모델명, 생성 시간이 표시된다",
+        "카드 hover 시 상세 정보가 오버레이된다",
+        "Mock 데이터로 최소 12개 이상의 샘플 카드가 표시된다",
+        "Feature Select(S2) 탭에 따라 카드가 필터링된다"
+      ],
+      "priority": 2,
+      "dependencies": ["S2"]
+    },
+    {
+      "id": "S4",
+      "title": "Creation Zone (프롬프트 영역)",
+      "description": "As a user, I want to input a prompt and configure options to generate an image.",
+      "acceptance_criteria": [
+        "멀티라인 프롬프트 입력창이 하단에 고정 배치된다",
+        "+버튼으로 이미지 업로드가 가능하다",
+        "이미지 업로드 시 입력창 위에 썸네일 미리보기가 표시된다",
+        "썸네일에 삭제(X) 버튼이 있다",
+        "모델 선택 드롭다운에 ComfyUI 모델 목록이 표시된다 (SDXL, SD 1.5, Flux, Juggernaut 등)",
+        "각 모델에 설명 Tooltip이 제공된다",
+        "프롬프트 영역 밖 좌하단에 'Internal' 버튼이 현재 모델 상태를 표시한다",
+        "Enter 또는 생성 버튼으로 이미지 생성(S5)이 트리거된다"
+      ],
+      "priority": 1,
+      "dependencies": ["S1"]
+    },
+    {
+      "id": "S5",
+      "title": "Image Generation Simulation",
+      "description": "As a user, I want to see real-time progress after clicking generate so that I know the status.",
+      "acceptance_criteria": [
+        "생성 요청 시 1~3초 setTimeout으로 시뮬레이션된다",
+        "0% -> 100% 프로그레스 바가 부드럽게 표시된다",
+        "생성 중 프롬프트 입력이 비활성화된다",
+        "완료 시 외부 샘플 이미지 URL이 결과로 Gallery에 추가된다",
+        "생성 중 Header의 Queue 상태 위젯 수치가 +1 증가하고, 완료 시 -1 감소한다",
+        "생성 실패 시뮬레이션 (10% 확률)과 에러 메시지 표시"
+      ],
+      "priority": 1,
+      "dependencies": ["S4"]
+    },
+    {
+      "id": "S6",
+      "title": "Style Guide Modal",
+      "description": "As a user, I want to learn image generation tips in a slide format so that I can improve my prompts.",
+      "acceptance_criteria": [
+        "모달 내 10장의 고해상도 팁 이미지가 슬라이드로 표시된다",
+        "좌우 화살표 네비게이션이 제공된다",
+        "하단 인디케이터 도트로 현재 위치가 표시된다",
+        "키보드 좌우 화살표로 탐색 가능하다",
+        "ESC 또는 배경 클릭으로 닫을 수 있다",
+        "슬라이드 전환 애니메이션이 부드럽다"
+      ],
+      "priority": 3,
+      "dependencies": ["S1"]
+    }
+  ],
+  "non_functional": {
+    "performance": "초기 로딩 < 2초, 인터랙션 응답 < 100ms, Mock 생성 시뮬레이션 1~3초",
+    "security": "Mock 기반이므로 기본 수준. XSS 방지 (innerHTML 미사용). 이미지 업로드 파일 타입 검증.",
+    "testing": "커버리지 80% 이상. Mock 서비스 로직 90% 이상. 컴포넌트 단위 테스트 필수.",
+    "styling": "CSS Modules 사용. Tailwind CSS 미사용. Samsung One UI 스타일 다크 모드 전용. 디자인 참고: higgsfield.ai",
+    "accessibility": "기본 키보드 네비게이션. aria-label 적용. 색상 대비 WCAG AA 수준."
+  },
+  "scale_override": null
+}
