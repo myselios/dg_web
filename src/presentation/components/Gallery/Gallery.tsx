@@ -22,9 +22,9 @@ function getModelName(modelId: string): string {
   return COMFY_MODELS.find((m) => m.id === modelId)?.name ?? modelId;
 }
 
-function GalleryCardItem({ card }: { card: GalleryCard }) {
+function GalleryCardItem({ card, onClick }: { card: GalleryCard; onClick: () => void }) {
   return (
-    <article className={styles.card}>
+    <article className={styles.card} onClick={onClick}>
       <div className={styles.imageWrap}>
         <img
           className={styles.image}
@@ -51,7 +51,11 @@ function GalleryCardItem({ card }: { card: GalleryCard }) {
   );
 }
 
-export function Gallery() {
+interface GalleryProps {
+  readonly onCardClick: (card: GalleryCard) => void;
+}
+
+export function Gallery({ onCardClick }: GalleryProps) {
   const { state } = useApp();
 
   const filtered = useMemo(
@@ -79,7 +83,7 @@ export function Gallery() {
       ) : (
         <div className={styles.grid}>
           {filtered.map((card) => (
-            <GalleryCardItem key={card.id} card={card} />
+            <GalleryCardItem key={card.id} card={card} onClick={() => onCardClick(card)} />
           ))}
         </div>
       )}

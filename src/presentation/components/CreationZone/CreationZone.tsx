@@ -1,5 +1,6 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
 import { useApp } from '../../context/AppContext';
+import { useToast } from '../common/Toast';
 import { COMFY_MODELS } from '../../../infrastructure/mock/data';
 import { simulateGeneration } from '../../../infrastructure/mock/generation-service';
 import type { ModelId } from '../../../domain/entities/types';
@@ -26,6 +27,7 @@ const ChevronIcon = () => (
 
 export function CreationZone() {
   const { state, dispatch } = useApp();
+  const { showToast } = useToast();
   const [isModelOpen, setIsModelOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
@@ -82,11 +84,14 @@ export function CreationZone() {
           likes: 0,
         },
       });
+      showToast('Image generated successfully!', 'success');
     } catch (err) {
       dispatch({ type: 'FAIL_GENERATION' });
-      setError(err instanceof Error ? err.message : 'Generation failed');
+      const msg = err instanceof Error ? err.message : 'Generation failed';
+      setError(msg);
+      showToast(msg, 'error');
     }
-  }, [state.prompt, state.selectedModel, state.selectedWorkflow, state.uploadedImage, isGenerating, dispatch]);
+  }, [state.prompt, state.selectedModel, state.selectedWorkflow, state.uploadedImage, isGenerating, dispatch, showToast]);
 
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
@@ -153,7 +158,13 @@ export function CreationZone() {
           className={styles.textarea}
           placeholder="Describe the image you want to create..."
           value={state.prompt}
-          onChange={(e) => dispatch({ type: 'SET_PROMPT', payload: e.target.value })}
+          onChange={(e) => {
+            dispatch({ type: 'SET_PROMPT', payload: e.target.value });
+            // Auto-resize
+            const el = e.target;
+            el.style.height = 'auto';
+            el.style.height = `${Math.min(el.scrollHeight, 120)}px`;
+          }}
           onKeyDown={handleKeyDown}
           disabled={isGenerating}
           rows={1}

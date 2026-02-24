@@ -21,7 +21,12 @@ const SparkleIcon = () => (
   </svg>
 );
 
-export function Header() {
+interface HeaderProps {
+  readonly onSearchClick: () => void;
+  readonly onHistoryClick: () => void;
+}
+
+export function Header({ onSearchClick, onHistoryClick }: HeaderProps) {
   const { state, dispatch } = useApp();
 
   return (
@@ -49,11 +54,11 @@ export function Header() {
           Style Guide
         </button>
 
-        <button className={styles.iconBtn} aria-label="Search">
+        <button className={styles.iconBtn} aria-label="Search" onClick={onSearchClick}>
           <SearchIcon />
         </button>
 
-        <button className={styles.iconBtn} aria-label="History">
+        <button className={styles.iconBtn} aria-label="History" onClick={onHistoryClick}>
           <HistoryIcon />
         </button>
 
