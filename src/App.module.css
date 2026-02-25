@@ -1,0 +1,27 @@
+/**
+ * App Layout Styles (T-013)
+ *
+ * Full viewport layout with fixed header and bottom creation zone.
+ * The content area scrolls between them.
+ */
+
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  position: relative;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding-top: 60px;   /* Height of fixed header */
+  padding-bottom: 72px; /* Height of fixed CreationZone */
+}
+
+.gallery {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0 16px 16px;
+}
