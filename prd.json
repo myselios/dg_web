@@ -1,0 +1,115 @@
+{
+  "$schema": "ai_automation PRD v1",
+  "project_name": "pcse-korean-quiz",
+  "goal": "GCP PCSE 시험 문제를 cloudpass.pro와 동일한 UX로 제공하되, 문제 영역 오른쪽에 한국어 번역 패널을 추가한 나만의 시험 학습 앱",
+  "tech_stack": {
+    "language": "TypeScript",
+    "framework": "Next.js 15 (App Router)",
+    "database": null,
+    "infrastructure": ["Vercel", "Tailwind CSS v4", "next/font (Space Grotesk + Noto Sans KR)"]
+  },
+  "context": {
+    "existing_patterns": "new project",
+    "constraints": "문제 데이터는 cloudpass.pro/ko/exams/gcp/google-pcse 에서 Python Playwright 스크래퍼로 수집. 수집된 JSON을 public/questions.json에 저장 후 정적 앱으로 서빙. 별도 백엔드 없음.",
+    "references": ["https://cloudpass.pro/ko/exams/gcp/google-pcse#sample-questions"],
+    "architecture_doc": "architecture.md",
+    "design_notes": "web-design-guideline 스킬 기준 모던+심플. Space Grotesk 헤딩 / Noto Sans KR 한국어. 화면 분할: 좌(영어 문제+보기+제출) / 우(한국어 문제 번역 패널). 다크/라이트 모드 지원."
+  },
+  "stories": [
+    {
+      "id": "S1",
+      "title": "문제 데이터 수집 스크래퍼",
+      "description": "As a developer, I want a Python Playwright scraper so that I can collect all GCP PCSE practice questions (English + Korean) from cloudpass.pro and save them as public/questions.json",
+      "acceptance_criteria": [
+        "scraper/scrape.py 실행 시 cloudpass.pro/ko/exams/gcp/google-pcse 를 크롤링한다",
+        "더보기 버튼 클릭 자동화 또는 /practice-test-{N} 페이지 순회로 모든 문제를 수집한다",
+        "각 문제에서 id, question_en, question_ko, options(key/text_en/text_ko), correct_answers[], explanation_ko, domain, difficulty 필드를 추출한다",
+        "수집 결과를 public/questions.json 으로 저장한다",
+        "최소 50개 이상 문제 수집을 확인한다",
+        "scraper/requirements.txt 에 playwright, beautifulsoup4, httpx 의존성이 명시된다"
+      ],
+      "priority": 1,
+      "dependencies": []
+    },
+    {
+      "id": "S2",
+      "title": "문제 목록 홈 화면",
+      "description": "As a student, I want to see all practice questions listed on the home page so that I can choose which question to attempt",
+      "acceptance_criteria": [
+        "/ 경로에서 questions.json 에서 로드한 문제 목록이 카드 그리드로 표시된다",
+        "각 카드에 문제 번호, 도메인(Logging, IAM 등), 난이도(EASY/MEDIUM/HARD), 완료 여부(✅/미완료) 가 표시된다",
+        "카드 클릭 시 /quiz/[id] 로 이동한다",
+        "전체 문제 수, 완료 수, 정답률 요약 통계가 헤더 아래에 표시된다",
+        "도메인 필터 탭(전체/도메인별)으로 필터링이 가능하다",
+        "모바일(375px)에서도 레이아웃이 정상 표시된다"
+      ],
+      "priority": 2,
+      "dependencies": ["S1"]
+    },
+    {
+      "id": "S3",
+      "title": "시험 화면 - 분할 레이아웃 (영어 + 한국어 패널)",
+      "description": "As a student, I want to see the English question on the left and Korean translation on the right so that I can understand the question without being fluent in English",
+      "acceptance_criteria": [
+        "/quiz/[id] 경로에서 해당 문제의 영어 원문과 선택지가 메인 영역에 표시된다",
+        "화면 오른쪽(데스크탑 기준 1/3 너비)에 한국어 번역 패널이 고정 표시된다",
+        "한국어 패널은 문제 텍스트만 번역 표시한다(보기 번역은 포함하지 않음)",
+        "선택지(A/B/C/D)는 클릭으로 선택 가능하며, 선택 시 시각적 강조(배경색/테두리)가 표시된다",
+        "복수 정답 문제는 체크박스, 단일 정답은 라디오 버튼 스타일로 렌더링된다",
+        "이전/다음 문제 네비게이션 버튼이 제공된다",
+        "태블릿 이하(768px)에서는 한국어 패널이 문제 하단으로 접을 수 있는 토글로 전환된다"
+      ],
+      "priority": 2,
+      "dependencies": ["S1"]
+    },
+    {
+      "id": "S4",
+      "title": "정답 제출 및 결과/해설 표시",
+      "description": "As a student, I want to submit my answer and immediately see if I was correct along with a Korean explanation so that I can learn from mistakes",
+      "acceptance_criteria": [
+        "Submit 버튼 클릭 시 정답/오답 결과가 즉시 표시된다",
+        "정답 시 ✅ 초록 배경, 오답 시 ❌ 빨간 배경으로 시각적 피드백이 나타난다",
+        "오답 시 정답이 무엇인지 함께 표시된다",
+        "정답/오답 여부와 관계없이 한국어 해설(explanation_ko)이 펼쳐진다",
+        "제출 후 다음 문제로 이동하는 버튼이 표시된다",
+        "결과는 localStorage에 저장되어 새로고침 후에도 완료 여부가 유지된다"
+      ],
+      "priority": 3,
+      "dependencies": ["S3"]
+    },
+    {
+      "id": "S5",
+      "title": "진행 상황 추적 (localStorage)",
+      "description": "As a student, I want my progress to be saved automatically so that I can continue studying where I left off",
+      "acceptance_criteria": [
+        "문제 제출 시 {questionId: {answered: true, correct: boolean, selectedAnswers: string[]}} 형식으로 localStorage에 저장된다",
+        "홈 화면에서 총 문제 수 / 완료 수 / 정답률이 실시간 반영된다",
+        "각 문제 카드에 완료(✅)/정답(초록)/오답(빨강) 상태 배지가 표시된다",
+        "Reset 버튼으로 전체 진행 상황 초기화가 가능하다(확인 다이얼로그 포함)"
+      ],
+      "priority": 4,
+      "dependencies": ["S4"]
+    },
+    {
+      "id": "S6",
+      "title": "Vercel 배포",
+      "description": "As a student, I want the app deployed on Vercel so that I can access it from any device",
+      "acceptance_criteria": [
+        "next build 가 에러 없이 완료된다",
+        "vercel.json 에 보안 헤더가 설정된다",
+        "public/questions.json 이 정적 파일로 서빙된다",
+        "Vercel URL로 실제 접근 가능하다",
+        "모바일/태블릿/데스크탑 반응형이 정상 동작한다"
+      ],
+      "priority": 5,
+      "dependencies": ["S2", "S3", "S4", "S5"]
+    }
+  ],
+  "non_functional": {
+    "performance": "홈 화면 LCP 1.5초 이하. questions.json 정적 서빙. next/image, next/font 사용",
+    "security": "CSP/X-Frame-Options 헤더 설정. 외부 API 호출 없음. localStorage만 사용",
+    "scalability": "정적 Next.js 앱 (no DB). 문제 추가는 questions.json 교체로 처리",
+    "testing": "핵심 컴포넌트(QuizCard, AnswerOptions, ResultPanel) 단위 테스트. 커버리지 70% 이상"
+  },
+  "scale_override": "M"
+}

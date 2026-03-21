@@ -1,0 +1,12 @@
+{
+  "project": "pcse-korean-quiz",
+  "scale": "M",
+  "total_tasks": 7,
+  "total_waves": 4,
+  "waves": [
+    {"wave_id": 1, "tasks": ["T-001", "T-002"]},
+    {"wave_id": 2, "tasks": ["T-003", "T-004"]},
+    {"wave_id": 3, "tasks": ["T-005", "T-006"]},
+    {"wave_id": 4, "tasks": ["T-007"]}
+  ]
+}
