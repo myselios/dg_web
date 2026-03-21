@@ -1,0 +1,112 @@
+[
+  {
+    "id": "24009",
+    "question_en": "Your company operates a single Google Cloud organization with 10 folders and 150 projects, and the SOC requires that all Google Cloud Console sign-in events and API calls that change resource configurations be streamed to an external SIEM in under 60 seconds. The SOC also requires all logs related to Google Workspace admin activity that is synced to Cloud Identity be captured. Which two actions should you take?",
+    "question_ko": "귀사는 10개의 폴더와 150개의 프로젝트를 보유한 단일 Google Cloud 조직을 운영하고 있습니다. SOC는 모든 Google Cloud Console 로그인 이벤트와 리소스 구성을 변경하는 API 호출이 60초 이내에 외부 SIEM으로 스트리밍되기를 요청합니다. 또한 Cloud Identity에 동기화된 Google Workspace 관리자 활동 관련 로그도 모두 캡처해야 합니다. 어떤 두 가지 조치를 취해야 합니까?",
+    "options": [
+      {
+        "key": "A",
+        "text_en": "Create an organization-level aggregated log sink, set the destination to a Cloud Storage bucket.",
+        "text_ko": "조직 수준 집계 로그 싱크를 생성하고 Cloud Storage 버킷을 대상으로 설정합니다."
+      },
+      {
+        "key": "B",
+        "text_en": "Create an organization-level aggregated log sink with includeChildren set to true, set the destination to a Pub/Sub topic.",
+        "text_ko": "includeChildren을 true로 설정한 조직 수준 집계 로그 싱크를 생성하고 Pub/Sub 토픽을 대상으로 설정합니다."
+      },
+      {
+        "key": "C",
+        "text_en": "Enable Data Access audit logs at the organization level for all services.",
+        "text_ko": "모든 서비스에 대해 조직 수준에서 데이터 액세스 감사 로그를 활성화합니다."
+      },
+      {
+        "key": "D",
+        "text_en": "Export Google Workspace audit logs to Cloud Logging by using the Google Workspace audit logs integration.",
+        "text_ko": "Google Workspace 감사 로그 통합을 사용하여 Google Workspace 감사 로그를 Cloud Logging으로 내보냅니다."
+      },
+      {
+        "key": "E",
+        "text_en": "Configure the external SIEM to parse AuthenticationInfo from the protoPayload field.",
+        "text_ko": "protoPayload 필드의 AuthenticationInfo를 파싱하도록 외부 SIEM을 구성합니다."
+      }
+    ],
+    "correct_answers": [
+      "B",
+      "D"
+    ],
+    "explanation_ko": "**핵심 개념: Cloud Logging + Pub/Sub SIEM 통합**\n\n**B가 정답인 이유:** 조직 수준 집계 로그 싱크에 includeChildren=true를 설정하면 모든 하위 폴더와 프로젝트의 로그가 단일 싱크로 집계됩니다. Pub/Sub을 대상으로 하면 실시간 스트리밍(60초 이내)이 가능하며, SIEM에서 구독할 수 있습니다.\n\n**D가 정답인 이유:** Google Workspace 감사 로그는 기본적으로 Cloud Logging에 포함되지 않습니다. Google Workspace 감사 로그 통합을 별도로 설정해야 Cloud Identity 동기화 관련 관리자 활동을 캡처할 수 있습니다.\n\n**오답 분석:**\n- A: Cloud Storage는 실시간 스트리밍을 지원하지 않습니다 (배치 방식).\n- C: 데이터 액세스 감사 로그는 API 호출 변경 이벤트와 다르며, SIEM 스트리밍과 직접 관련 없습니다.\n- E: SIEM 설정은 Google Cloud 측 로그 내보내기 문제를 해결하지 못합니다.",
+    "domain": "Centralized Logging & Audit",
+    "difficulty": "MEDIUM"
+  },
+  {
+    "id": "24010",
+    "question_en": "Your healthcare analytics startup is building a multi-region telemetry pipeline on Google Cloud that spans Compute Engine VMs, a GKE Autopilot cluster, Cloud Storage buckets, BigQuery datasets (~50 TB), and Pub/Sub topics processing ~80,000 messages per second. Under your GDPR data protection by design program, the security review mandates that: (1) you—not Google—must control key creation, 90-day rotation, and IAM-scoped usage of encryption keys; (2) keys must reside in Google Cloud KMS/HSM with no dependency on external key stores; and (3) a single key management approach must be supported uniformly across all listed services. Which option should you choose?",
+    "question_ko": "귀사의 헬스케어 분석 스타트업이 Compute Engine VM, GKE Autopilot 클러스터, Cloud Storage 버킷, BigQuery 데이터셋(~50TB), 초당 ~80,000개 메시지를 처리하는 Pub/Sub 토픽에 걸친 다중 리전 원격 측정 파이프라인을 구축하고 있습니다. GDPR 데이터 보호 설계 프로그램에 따라 보안 검토에서 다음을 의무화합니다: (1) Google이 아닌 귀사가 암호화 키의 생성, 90일 교체, IAM 범위 사용을 제어해야 합니다; (2) 키는 외부 키 저장소에 의존하지 않고 Google Cloud KMS/HSM에 있어야 합니다; (3) 나열된 모든 서비스에서 단일 키 관리 방식을 균일하게 지원해야 합니다. 어떤 옵션을 선택해야 합니까?",
+    "options": [
+      {
+        "key": "A",
+        "text_en": "Cloud External Key Manager (Cloud EKM)",
+        "text_ko": "Cloud External Key Manager (Cloud EKM)"
+      },
+      {
+        "key": "B",
+        "text_en": "Customer-managed encryption keys (CMEK) with Cloud KMS",
+        "text_ko": "Cloud KMS를 사용한 고객 관리 암호화 키(CMEK)"
+      },
+      {
+        "key": "C",
+        "text_en": "Customer-supplied encryption keys (CSEK)",
+        "text_ko": "고객 제공 암호화 키(CSEK)"
+      },
+      {
+        "key": "D",
+        "text_en": "Google default encryption",
+        "text_ko": "Google 기본 암호화"
+      }
+    ],
+    "correct_answers": [
+      "B"
+    ],
+    "explanation_ko": "**핵심 개념: CMEK vs CSEK vs EKM 비교**\n\n**B(CMEK)가 정답인 이유:** CMEK는 Google Cloud KMS/HSM에 키를 저장하면서 사용자가 키 생성, 90일 교체, IAM 기반 접근 제어를 직접 관리할 수 있습니다. Compute Engine, GKE, Cloud Storage, BigQuery, Pub/Sub 등 모든 주요 서비스에서 균일하게 지원됩니다.\n\n**오답 분석:**\n- A(EKM): 키가 외부 키 저장소에 있어야 하므로 요건 (2) 위반입니다.\n- C(CSEK): 사용자가 키 바이트를 직접 관리해야 하며, BigQuery와 일부 서비스에서 미지원입니다.\n- D: Google이 키를 완전히 관리하므로 요건 (1) 위반입니다.",
+    "domain": "Encryption Key Management",
+    "difficulty": "EASY"
+  },
+  {
+    "id": "24011",
+    "question_en": "You lead network security for a fintech platform. You need to examine full packet payloads and L4/L7 headers for east-west traffic between two production subnets and forward up to 8 Gbps to a third-party NIDS running on Compute Engine. Which Google Cloud feature should you use?",
+    "question_ko": "귀사는 핀테크 플랫폼의 네트워크 보안을 담당하고 있습니다. 두 프로덕션 서브넷 간 동서(East-West) 트래픽에 대해 전체 패킷 페이로드와 L4/L7 헤더를 검사하고, 최대 8Gbps를 Compute Engine에서 실행 중인 서드파티 NIDS로 전달해야 합니다. 어떤 Google Cloud 기능을 사용해야 합니까?",
+    "options": [
+      {
+        "key": "A",
+        "text_en": "Cloud IDS",
+        "text_ko": "Cloud IDS"
+      },
+      {
+        "key": "B",
+        "text_en": "VPC Service Controls logs",
+        "text_ko": "VPC 서비스 제어 로그"
+      },
+      {
+        "key": "C",
+        "text_en": "VPC Flow Logs",
+        "text_ko": "VPC 흐름 로그"
+      },
+      {
+        "key": "D",
+        "text_en": "Google Cloud Armor",
+        "text_ko": "Google Cloud Armor"
+      },
+      {
+        "key": "E",
+        "text_en": "Packet Mirroring",
+        "text_ko": "패킷 미러링"
+      }
+    ],
+    "correct_answers": [
+      "E"
+    ],
+    "explanation_ko": "**핵심 개념: Packet Mirroring vs VPC Flow Logs vs Cloud IDS**\n\n**E(Packet Mirroring)가 정답인 이유:** Packet Mirroring은 지정된 VM 또는 서브넷의 트래픽을 복제하여 콜렉터 인스턴스로 전달합니다. 전체 패킷 페이로드(L4/L7 포함)를 캡처하며, 8Gbps 이상의 트래픽을 서드파티 NIDS 인스턴스로 전달할 수 있습니다.\n\n**오답 분석:**\n- A(Cloud IDS): Google 관리형 IDS로, 서드파티 NIDS로 전달하는 커스텀 통합에 적합하지 않습니다.\n- B(VPC Service Controls logs): 서비스 접근 제어 로그이며, 패킷 캡처 기능이 없습니다.\n- C(VPC Flow Logs): 메타데이터만 기록(IP, 포트, 바이트 수)하며, 전체 패킷 페이로드를 캡처하지 않습니다.\n- D(Cloud Armor): DDoS/WAF 보호 도구로, 패킷 미러링과 무관합니다.",
+    "domain": "Network Security",
+    "difficulty": "EASY"
+  }
+]

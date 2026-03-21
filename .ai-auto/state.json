@@ -1,7 +1,13 @@
 {
-  "current_phase": 6,
-  "completed_phases": [1, 2, 3, 4, 5],
-  "completed_tasks": ["T-001","T-002","T-003","T-004","T-005","T-006","T-007","T-008","T-009","T-010","T-011","T-012","T-013"],
+  "pipeline_id": "pcse-quiz-001",
+  "project": "pcse-korean-quiz",
+  "started_at": "2026-03-21T11:13:00Z",
+  "current_phase": 1,
+  "completed_phases": [],
+  "completed_tasks": [],
   "failed_tasks": [],
-  "last_updated": "2026-02-25T09:30:00Z"
+  "skipped_tasks": [],
+  "task_loops": {},
+  "scale": "M",
+  "last_updated": "2026-03-21T11:13:00Z"
 }
